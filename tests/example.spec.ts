@@ -1,17 +1,17 @@
 import { test, expect } from '@playwright/test';
 
-const url = 'https://demo-bank.vercel.app/';
-test.beforeEach(async({page})=>{
-
-  await page.goto(url);
-})
 test.describe('User login to Demobank', () => {
+  
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/');
+  });
+  
   test('successful login with correct credentials', async ({ page }) => {
     //Arange
     const userId = 'hallo123';
     const userPassword = 'byebye12';
     const userName = 'Jan Demobankowy';
-        //Act
+    //Act
     await page.getByTestId('login-input').fill(userId);
     await page.getByTestId('password-input').fill(userPassword);
     await page.getByTestId('login-button').click();
