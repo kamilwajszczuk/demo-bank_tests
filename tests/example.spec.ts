@@ -1,41 +1,47 @@
 import { test, expect } from '@playwright/test';
 
+const url = 'https://demo-bank.vercel.app/';
+test.beforeEach(async({page})=>{
+
+  await page.goto(url);
+})
 test.describe('User login to Demobank', () => {
   test('successful login with correct credentials', async ({ page }) => {
     //Arange
-    const url = 'https://demo-bank.vercel.app/';
     const userId = 'hallo123';
     const userPassword = 'byebye12';
     const userName = 'Jan Demobankowy';
-
-    //Act
-    await page.goto(url);
+        //Act
     await page.getByTestId('login-input').fill(userId);
     await page.getByTestId('password-input').fill(userPassword);
     await page.getByTestId('login-button').click();
-
     //Assert
     await expect(page.getByTestId('user-name')).toHaveText(userName);
   });
 
   test('unsuccessful login with too short username', async ({ page }) => {
-    await page.goto('https://demo-bank.vercel.app/');
-    await page.getByTestId('login-input').fill('tesr');
+    //Arange
+    const incorrectUserId = 'tesr';
+    const errorMessage = 'identyfikator ma min. 8 znaków';
+    //Act
+    await page.getByTestId('login-input').fill(incorrectUserId);
     await page.getByTestId('password-input').click();
-
-    await expect(page.getByTestId('error-login-id')).toHaveText(
-      'identyfikator ma min. 8 znaków',
-    );
+    //Assert
+    await expect(page.getByTestId('error-login-id')).toHaveText(errorMessage);
   });
 
   test('unsuccessful login with too short password', async ({ page }) => {
-    await page.goto('https://demo-bank.vercel.app/');
-    await page.getByTestId('login-input').fill('testerLO');
-    await page.getByTestId('password-input').fill('1234');
+    //Arrange
+    const userId = 'hallo123';
+    const incorrectPassword = '1234';
+    const expectErrorMessage = 'hasło ma min. 8 znaków';
+    //Act
+    await page.getByTestId('login-input').fill(userId);
+    await page.getByTestId('password-input').fill(incorrectPassword);
     await page.getByTestId('password-input').blur();
-
+    //Assert
     await expect(page.getByTestId('error-login-password')).toHaveText(
-      'hasło ma min. 8 znaków',
+      expectErrorMessage,
     );
   });
 });
