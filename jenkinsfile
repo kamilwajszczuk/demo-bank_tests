@@ -4,18 +4,31 @@ pipeline {
         // Ustawienia środowiska, np. wersja Node.js
         NODE_VERSION = '14' // lub inna wersja, którą używasz
     }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        stage('Run Playwright Tests') {
-            steps {
-                sh 'npx playwright test'
-            }
-        }
+       
+    stage('install playwright') {
+      steps {
+        sh '''
+          npm i -D @playwright/test
+          npx playwright install
+        '''
+      }
     }
+
+    stage('test') {
+      steps {
+        sh '''
+          npx playwright test --list
+          npx playwright test
+        '''
+      }
+    
     post {
         success {
             echo 'Testy zakończyły się sukcesem!'
@@ -24,4 +37,6 @@ pipeline {
             echo 'Testy nie powiodły się.'
         }
     }
+}
+}
 }
