@@ -14,13 +14,6 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                // Zainstaluj zależności
-                sh 'npm install'
-            }
-        }
-
         stage('Run Playwright Tests') {
             steps {
                 // Uruchom testy Playwright
