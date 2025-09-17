@@ -1,11 +1,9 @@
 pipeline {
     agent any
-
-    tools {
-        // Ustaw wersję Node.js, którą chcesz użyć
-        nodejs 'NodeJS_14' // nazwa instalacji zdefiniowanej w Jenkinsie
+    environment {
+        // Ustawienia środowiska, np. wersja Node.js
+        NODE_VERSION = '14' // lub inna wersja, którą używasz
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -14,7 +12,7 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm ci'
             }
         }
         stage('Run Playwright Tests') {
