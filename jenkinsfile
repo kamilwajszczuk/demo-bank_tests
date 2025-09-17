@@ -1,14 +1,22 @@
 pipeline {
     agent any
-    environment {
-        // Ustawienia środowiska, np. wersja Node.js
-        NODE_VERSION = '14' // lub inna wersja, którą używasz
-    }
-
+    node {
+    env.NODEJS_HOME = "${tool 'Node 6.x'}"
+    // on linux / mac
+    env.PATH="${env.NODEJS_HOME};${env.PATH}"
+    sh 'npm --version'
+}
+  
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install'
             }
         }
        
