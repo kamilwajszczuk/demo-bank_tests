@@ -1,27 +1,28 @@
 pipeline {
     agent any
 
-    environment {
-        // Ustawienia środowiska, np. wersja Node.js
-        NODE_VERSION = '22.13.1' // lub inna wersja, którą używasz
+    tools {
+        // Ustaw wersję Node.js, którą chcesz użyć
+        nodejs 'NodeJS_14' // nazwa instalacji zdefiniowanej w Jenkinsie
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Pobierz kod z repozytorium
                 checkout scm
             }
         }
-
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
         stage('Run Playwright Tests') {
             steps {
-                // Uruchom testy Playwright
                 sh 'npx playwright test'
             }
         }
     }
-
     post {
         success {
             echo 'Testy zakończyły się sukcesem!'
