@@ -10,7 +10,7 @@ test.describe('User login to Demobank', () => {
     loginPage = new LoginPage(page);
   });
 
-  test.only('successful login with correct credentials', async ({ page }) => {
+  test('successful login with correct credentials', async ({ page }) => {
     //Arange
     const userId = loginData.userId;
     const userPassword = loginData.userPassword;
