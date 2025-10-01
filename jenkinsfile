@@ -1,10 +1,21 @@
 pipeline {
    agent { docker { image 'mcr.microsoft.com/playwright:v1.55.1-noble' } }
    stages {
-      stage('Deploy') {
+      stage('Build') {
             steps {
-                sh 'docker build -t playwright-docker .'
-                sh 'docker run -it playwright-docker:latest npm run test'
+                sh 'npm install' // Uruchomienie polecenia wewnątrz kontenera
+                sh 'npm run build'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'docker build -t myapp:latest .'
+                sh 'docker run -d -p 8080:8080 myapp:latest'
             }
         }
    }
