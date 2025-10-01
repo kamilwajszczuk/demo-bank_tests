@@ -1,46 +1,11 @@
 pipeline {
-    agent any
-    environment {
-        NODE_VERSION = '22'
-    }
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Install dependencies') {
-            steps {
-                sh 'npm ci'
-            }
-        }
-       
-    stage('install playwright') {
-      steps {
-        sh '''
-          npm i -D @playwright/test
-          npx playwright install
-        '''
+   agent { docker { image 'mcr.microsoft.com/playwright:v1.55.1-noble' } }
+   stages {
+      stage('e2e-tests') {
+         steps {
+            sh 'npm ci'
+            sh 'npx playwright test'
+         }
       }
-    }
-
-    stage('test') {
-      steps {
-        sh '''
-          npx playwright test --list
-          npx playwright test
-        '''
-      }
-    
-    post {
-        success {
-            echo 'Testy zakończyły się sukcesem!'
-        }
-        failure {
-            echo 'Testy nie powiodły się.'
-        }
-    }
-}
-}
+   }
 }
